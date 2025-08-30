@@ -12,21 +12,21 @@ pub mod escrow_anchor {
     use super::*;
 
     #[instruction(discriminator = 0)]
-    pub fn make(ctx: Context<Initialize>, seed : u64, receive : u64, amount : u64) -> Result<()> {
+    pub fn make(ctx: Context<Make>, seed : u64, receive : u64, amount : u64) -> Result<()> {
         
 
         Ok(())
     }
 
     #[instruction(discriminator = 1)]
-    pub fn take(ctx: Context<Initialize>) -> Result<()> {
+    pub fn take(ctx: Context<Take>) -> Result<()> {
         
         
         Ok(())
     }
 
     #[instruction(discriminator = 2)]
-    pub fn refund(ctx: Context<Initialize>) -> Result<()> {
+    pub fn refund(ctx: Context<Refund>) -> Result<()> {
         
         
         Ok(())
