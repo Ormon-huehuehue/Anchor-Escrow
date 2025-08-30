@@ -1,13 +1,13 @@
+ // this file will perform the following actions :-
+
+// - initializes the escrow record and stores all the terms
+// - creates the vault (an ATA for mint_a owned by the escrow)
+// - Moves the maker's token A into the vault with a CPI to the SPL-Token Program
+
 use anchor_lang::prelude::*;
 use anchor_spl::{associated_token::AssociatedToken, token::{transfer_checked, TransferChecked}, token_interface::{Mint, TokenAccount}};
 
-use crate::state::Escrow;
-
-//initializes the escrow record and stores all the terms
-
-//creates the vault (an ATA for mint_a owned by the escrow)
-
-//Moves the maker's token A into the vault with a CPI to the SPL-Token Program
+use crate::{errors::EscrowError, state::Escrow};
 
 
 #[derive(Accounts)]
@@ -38,7 +38,7 @@ pub struct Make<'info> {
 
 
     #[account(
-        mut, 
+        mut,
         associated_token::mint = mint_a,
         associated_token::authority = maker,
         associated_token::token_program = token_program
@@ -81,7 +81,7 @@ impl <'info> Make<'info> {
     }
 
     // deposit the token
-    fn deposit_token(&self, amount: u64)->Result<()> {
+    fn deposit_tokens(&self, amount: u64)->Result<()> {
         
         let cpi_program = self.token_program.to_account_info();
 
@@ -105,4 +105,19 @@ impl <'info> Make<'info> {
 
         Ok(())
     }
+}
+
+
+pub fn handler(ctx : Context<Make>, seeds : u64, recieve : u64, amount : u64)-> Result<()>{
+    // validate the amount
+    require_gt!(receive, 0, EscrowError::InvalidAmount);
+    require_gt!(amount, 0, EscrowError::InvalidAmount);
+
+    //save the escrow data
+    ctx.accounts.populate_escrow(seeds, amount, ctx.bumps.escrow)?;
+
+    //deposit tokens
+    ctx.accounts.deposit_tokens(amount)?;
+
+    Ok(())
 }
