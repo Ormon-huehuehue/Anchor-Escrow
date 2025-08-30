@@ -1,13 +1,34 @@
 use anchor_lang::prelude::*;
 
-declare_id!("9S5m1NYWwtc7XhMP7Nb7UFTwhRvxRTupX2KMZsYWhYLF");
+mod state;
+mod errors;
+mod instructions;
+use instructions::*;
+
+declare_id!("22222222222222222222222222222222222222222222");
 
 #[program]
 pub mod escrow_anchor {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
+    #[instruction(discriminator = 0)]
+    pub fn make(ctx: Context<Initialize>, seed : u64, receive : u64, amount : u64) -> Result<()> {
+        
+
+        Ok(())
+    }
+
+    #[instruction(discriminator = 1)]
+    pub fn take(ctx: Context<Initialize>) -> Result<()> {
+        
+        
+        Ok(())
+    }
+
+    #[instruction(discriminator = 2)]
+    pub fn refund(ctx: Context<Initialize>) -> Result<()> {
+        
+        
         Ok(())
     }
 }
