@@ -52,14 +52,13 @@ pub struct Make<'info> {
         associated_token::authority = escrow,
         associated_token::token_program = token_program
     )]
-    pub vault : InterfaceAccount<'info, TokenAccount>,
+    pub vault : InterfaceAccount<'info, TokenAccount>,  //ATA for token-A owned by the escrow account
 
     //Programs
-
     pub associated_token_program : Program<'info, AssociatedToken>,
 
     //why TokenInterface ? 
-    // Interface<'info, Token> would only work with classic SPL-Token program, but with TokenInterface -> it can work with both classic spl-token and token-2022 programs both
+    // Interface<'info, Token> would only work with classic SPL-Token program, but with TokenInterface -> it can work with both classic spl-token and token-2022 programs
     pub token_program : Interface<'info, TokenInterface>,
     pub system_program : Program<'info, System>
 }

@@ -57,8 +57,8 @@ impl <'info> Refund<'info>{
         let cpi_accounts = TransferChecked{
             from : self.vault.to_account_info(),
             to : self.maker_ata_a.to_account_info(),
-            authority : self.maker.to_account_info(),
-            mint : self.mint_a.to_account_info()
+            mint : self.mint_a.to_account_info(),
+            authority : self.escrow.to_account_info()
         };
 
         let close_cpi_accounts = CloseAccount{
@@ -66,8 +66,6 @@ impl <'info> Refund<'info>{
             authority : self.escrow.to_account_info(),
             destination : self.maker.to_account_info()
         };
-
-        let binding = self.escrow.seed.to_le_bytes();
 
         let signer_key = self.maker.to_account_info().key();
 
