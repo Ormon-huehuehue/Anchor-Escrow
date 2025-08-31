@@ -67,9 +67,10 @@ impl <'info> Refund<'info>{
             destination : self.maker.to_account_info()
         };
 
-        let signer_key = self.maker.to_account_info().key();
+        let signer_key = self.maker.key();
+        let escrow_seeds = self.escrow.seed.to_le_bytes();
 
-        let seeds = &[b"escrow", signer_key.as_ref(), &[self.escrow.bump] ];
+        let seeds = &[b"escrow", signer_key.as_ref(), &escrow_seeds.as_ref(), &[self.escrow.bump] ];
 
         let signer_seeds = &[&seeds[..]];
 
