@@ -14,21 +14,21 @@ pub mod escrow_anchor {
 
     #[instruction(discriminator = 0)]
     pub fn make(ctx: Context<Make>, seed : u64, receive : u64, amount : u64) -> Result<()> {
-        make::handler(ctx, seeds, receive, amount);
+        make::handler(ctx, seed, receive, amount)?;
 
         Ok(())
     }
 
     #[instruction(discriminator = 1)]
     pub fn take(ctx: Context<Take>) -> Result<()> {
-        
+        take::handler(ctx)?;
         
         Ok(())
     }
 
     #[instruction(discriminator = 2)]
     pub fn refund(ctx: Context<Refund>) -> Result<()> {
-        
+        refund::handler(ctx)?;
         
         Ok(())
     }

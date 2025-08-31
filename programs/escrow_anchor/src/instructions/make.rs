@@ -5,7 +5,7 @@
 // - Moves the maker's token A into the vault with a CPI to the SPL-Token Program
 
 use anchor_lang::prelude::*;
-use anchor_spl::{associated_token::AssociatedToken, token::{transfer_checked, TransferChecked}, token_interface::{Mint, TokenAccount}};
+use anchor_spl::{associated_token::AssociatedToken, token::{transfer_checked, TransferChecked}, token_interface::{Mint, TokenAccount, TokenInterface}};
 
 use crate::{errors::EscrowError, state::Escrow};
 

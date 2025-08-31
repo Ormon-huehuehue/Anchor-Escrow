@@ -51,8 +51,9 @@ pub struct Refund<'info>{
 
 
 impl <'info> Refund<'info>{
-    pub fn withdraw_funds_and_close_vault(&mut self)-> Result<()>{
+    fn withdraw_funds_and_close_vault(&mut self)-> Result<()>{
         let cpi_program = self.token_program.to_account_info();
+
         let cpi_accounts = TransferChecked{
             from : self.vault.to_account_info(),
             to : self.maker_ata_a.to_account_info(),
@@ -66,18 +67,19 @@ impl <'info> Refund<'info>{
             destination : self.maker.to_account_info()
         };
 
-        let signer_seeds : [&[&[u8]] ; 1] = [&
-            [
-                b"escrow", self.maker.to_account_info().key().as_ref(), 
-                &self.escrow.seed.to_le_bytes().as_ref()[..],
-                &[self.escrow.bump]
-            ]
-        ];
+        let binding = self.escrow.seed.to_le_bytes();
+
+        let signer_key = self.maker.to_account_info().key();
+
+        let seeds = &[b"escrow", signer_key.as_ref(), &[self.escrow.bump] ];
+
+        let signer_seeds = &[&seeds[..]];
+
 
         let cpi_context = CpiContext::new_with_signer(
-            program, 
-            accounts, 
-            &signer_seeds
+            cpi_program.clone(), 
+            cpi_accounts, 
+            signer_seeds
         );
 
         transfer_checked(
@@ -89,15 +91,21 @@ impl <'info> Refund<'info>{
         let close_cpi_context = CpiContext::new_with_signer(
             cpi_program, 
             close_cpi_accounts, 
-            &signer_seeds
+            signer_seeds
         );
 
         close_account(
-            cpi_context
+            close_cpi_context
         )?;
 
 
         Ok(())
 
     }
+}
+
+pub fn handler(ctx: Context<Refund>)->Result<()>{
+    ctx.accounts.withdraw_funds_and_close_vault()?;
+
+    Ok(())
 }
