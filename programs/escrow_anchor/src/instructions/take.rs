@@ -20,7 +20,7 @@ use anchor_spl::{
 pub struct Take<'info> {
     #[account(mut)]
     pub taker: Signer<'info>,
-    
+
     #[account(mut)]
     pub maker: SystemAccount<'info>,
 
@@ -126,7 +126,10 @@ impl<'info> Take<'info> {
 }
 
 pub fn handler(ctx: Context<Take>) -> Result<()> {
+    // transfer token B to maker
     ctx.accounts.transfer_to_maker()?;
+
+    //withdraw and close the vault account
     ctx.accounts.withdraw_and_close_vault()?;
     Ok(())
 }
